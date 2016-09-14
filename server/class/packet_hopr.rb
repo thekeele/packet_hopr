@@ -25,28 +25,22 @@ class PacketHopr
       ip = line.scan(/\d{1,3}[.]\d{1,3}[.]\d{1,3}[.]\d{1,3}/)
 
       # first line of traceroute tells us where we're starting
-      if index.zero?
-        # puts "Hops to #{@domain} (#{ip.join(',')})"
-      else
-        # sometimes traceroute can't resolve to an IP, security?
-        if !ip.empty?
-          # puts "Hop #{index} -> #{ip}"
-
-          # some hops have multiple IPs so we account for that
-          if ip.count == 1
-            hops.push(ip.join(','))
-          elsif ip.count > 1
-            # multiples return an array of IPs
-            ip.each do |hop|
-              hops.push(hop)
-            end
+      # sometimes traceroute can't resolve to an IP, security?
+      if !index.zero? and !ip.empty?
+        # some hops have multiple IPs so we account for that
+        if ip.count == 1
+          hops.push(ip.join(','))
+        elsif ip.count > 1
+          # multiples return an array of IPs
+          ip.each do |hop|
+            hops.push(hop)
           end
         end
       end
     end
 
     return hops
-  end
+  end # end traceroute()
 
   def location(hops)
     # create hash for JSON response to API
@@ -62,7 +56,6 @@ class PacketHopr
     end
 
     return path
-  end
+  end # end location(hops)
 
-  # end PacketHopr
-end
+end # end PacketHopr
